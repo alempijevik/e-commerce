@@ -2,13 +2,16 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect } from "react";
 import CardList from "./components/CardList/CardList";
+import Nav from "./components/Nav/Nav";
 import Pagination from "./components/Pagination/Pagination";
 
 function App() {
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [itemsShown, setItemsShown] = useState([]);
+  const [favorites, setFavorites] = useState();
   const [page, setPage] = useState(0);
+  const [filteredProducts, setfilteredProducts] = useState([]);
   const limitPage = 20;
 
   const fetchProductsHandler = async () => {
@@ -20,33 +23,37 @@ function App() {
     console.log(data);
   };
 
-//   const previousPage = () => {
-//     if (page === 0 || isLoading) return;
-// 	setIsLoading(true)
-//     setPage(page - limitPage);
-//   };
-
-//   const nextPage = () => {
-//     if (isLoading) return;
-// 	setIsLoading(true)
-//     setPage(page + limitPage);
-//   };
-
   useEffect(() => {
     fetchProductsHandler();
     setIsLoading(false);
   }, []);
 
   useEffect(() => {
+    // filteredProducts ? setItemsShown(filteredProducts.slice(page, page + limitPage)) : setItemsShown(products.slice(page, page + limitPage))
     setItemsShown(products.slice(page, page + limitPage));
-	setIsLoading(false)
+    setIsLoading(false);
   }, [page]);
 
   return (
     <div className="App">
       <div>
+        <Nav
+          setFavorites={setFavorites}
+          limitPage={limitPage}
+          products={products}
+          filteredProducts={filteredProducts}
+          setfilteredProducts={setfilteredProducts}
+        />
         {!isLoading && <CardList products={itemsShown} />}
-        <Pagination isLoading={isLoading} page={page} limitPage={limitPage} setPage={setPage} setIsLoading={setIsLoading} />
+        <Pagination
+          isLoading={isLoading}
+          setIsLoading={setIsLoading}
+          page={page}
+          setPage={setPage}
+          favorites={favorites}
+          setFavorites={setFavorites}
+          limitPage={limitPage}
+        />
       </div>
       {isLoading && <p className="text-center">Loading...</p>}
     </div>

@@ -3,11 +3,13 @@ import "./CardList.scss";
 import Card from '../Card/Card'
 
 const CardList = (props) => (
-  <div className="container">
-    <div className="row">
-      {props.products.map((product) => (
-        <Card product={product} key={product.id} />
-        ))}
+  <div className="card--list">
+    <div className="container">
+      <div className="row">
+        {props.products.map((product) => (
+          <Card product={product} key={product.id} />
+          ))}
+      </div>
     </div>
   </div>
 );
