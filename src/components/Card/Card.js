@@ -4,7 +4,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 const Card = (props) => {
-  const [ fave, setFave ] = useState(false);
+  const [ fave, setFave ] = useState(props.favorites[props.product.id]);
+
+  const setFavoriteCard = (id, fave) => {
+    setFave(fave)
+    const fav = {...props.favorites}
+    if (props.favorites[id]) {
+      delete fav[id]
+    } else {
+      fav[id] = 1
+    }
+    props.setFavorites(fav)
+  }
 
   const saleTag = (price, sale) => {
     const percentage = Math.floor((100 * sale) / price);
@@ -37,7 +48,7 @@ const Card = (props) => {
             
           </div>
           {price(props.product.base_price, props.product.actual_price)}
-          <FontAwesomeIcon onClick={() => setFave(!fave)} className={`card--product__heart ${fave ? 'fave' : ''}`} icon={faHeart} />
+          <FontAwesomeIcon onClick={() => setFavoriteCard(props.product.id, !fave)} className={`card--product__heart ${fave ? 'fave' : ''}`} icon={faHeart} />
         </div>
         {saleTag(props.product.base_price, props.product.actual_price)}
       </div>

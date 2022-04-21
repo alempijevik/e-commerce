@@ -5,7 +5,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleLeft, faAngleRight } from "@fortawesome/free-solid-svg-icons";
 
 
-const Pagination = ({isLoading, page, limitPage, setPage, setIsLoading}) => {
+const Pagination = ({isLoading, page, limitPage, setPage, setIsLoading, products, filteredProducts, view}) => {
+  const nextIcon = () => {
+    const icon = <FontAwesomeIcon className='pagination__navigator' onClick={() => {nextPage()}} icon={faAngleRight} />
+    if (view === 'home') {
+      if ((filteredProducts.length === 0 && products.length > page + limitPage) || filteredProducts.length > page + limitPage) {
+        return icon
+      }
+    } else if (view === 'favorites') {
+      if (filteredProducts.length > page + limitPage) {
+        return icon
+      }
+    }
+    return null
+  }
+
   const previousPage = () => {
     if (page === 0 || isLoading) return;
 	  setIsLoading(true)
@@ -19,8 +33,8 @@ const Pagination = ({isLoading, page, limitPage, setPage, setIsLoading}) => {
   };
   return (
     <div className="pagination">
-      <FontAwesomeIcon className='pagination__navigator' onClick={() => {previousPage()}} icon={faAngleLeft} />
-      <FontAwesomeIcon className='pagination__navigator' onClick={() => {nextPage()}} icon={faAngleRight} />
+      {page > 0 && <FontAwesomeIcon className='pagination__navigator' onClick={() => {previousPage()}} icon={faAngleLeft} />}
+      {nextIcon()}
     </div>
   )
 };
